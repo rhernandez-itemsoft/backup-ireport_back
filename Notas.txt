@@ -1,0 +1,50 @@
+
+helpers
+https://git-scm.com/book/en/v2/Git-Basics-Tagging
+git tag -a v1.0.10 -m "version 1.0.10"
+git push origin v1.0.10
+
+# para que el tag y los cambios tengan efecto y se puedan descargar hay que ejecutar lo siguiente:
+git push origin master
+go clean -cache -modcache -i -r
+go env -w GOPRIVATE="github.com/YourOrganizationName"
+
+
+
+https://docs.iris-go.com/iris/localization#example
+
+https://gorm.io/docs/create.html
+
+
+
+
+{
+    "ErrorCode": 1,
+    "messages": [
+        "No se ha podido almacenar el datasource"
+    ],
+    "data": {
+        "id": 0,
+        "name": "DataSource01",
+        "description": "DataSource01",
+        "method": "get",
+        "endpoint": "http://localhost:8080",
+        "authType": "apiKey",
+        "authRequest": {
+            "bearer": "",
+            "username": "",
+            "password": "",
+            "apiSource": "header",
+            "apiKey": "access-token",
+            "apiValue": "123456"
+        },
+        "dataType": "json",
+        "contentType": "formData",
+        "dataRequest": [
+            {
+                "key": "name",
+                "type": ""
+            }
+        ]
+    }
+}

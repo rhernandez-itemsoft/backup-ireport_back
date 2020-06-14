@@ -1,0 +1,36 @@
+package migration
+
+import (
+	conf "ireport/config"
+
+	_ "github.com/go-sql-driver/mysql"
+	"github.com/jinzhu/gorm"
+
+	"github.com/golang-migrate/migrate/v4"
+	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
+)
+
+func main() {
+	migrateDataBase()
+}
+
+func migrateDataBase() error {
+	db, err := gorm.Open("mysql", conf.DBConf.User+":"+conf.DBConf.Password+"@("+conf.DBConf.Server+":"+conf.DBConf.Port+")/"+conf.DBConf.DataBase+"?multiStatements=true")
+	defer db.Close()
+	if err != nil {
+		return err
+	}
+	driver, _ := mysql.WithInstance(db.DB(), &mysql.Config{})
+	m, err := migrate.NewWithDatabaseInstance(
+		"file:///Personal\\ItemsoftMX\\Projects\\Golang\\src\\ireport-back\\migration",
+
+		"ireport",
+		driver,
+	)
+	if err != nil {
+		return err
+	}
+	m.Steps(2)
+	return nil
+}
