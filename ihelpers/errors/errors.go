@@ -19,4 +19,6 @@ func Catch(err error, _exit ...bool) {
 // New crea  un error
 func New(_err string) error {
 	return errors.New(_err)
+	// pc, fn, line, _ := runtime.Caller(1)
+	// errorX := fmt.Sprintf("[error] in %s[%s:%d] %v", runtime.FuncForPC(pc).Name(), fn, line, err.Error())
 }

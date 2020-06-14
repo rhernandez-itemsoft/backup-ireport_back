@@ -14,9 +14,9 @@ func (app *Definition) saveManager(_input *vmdl.Datasource) error {
 		Description: _input.Description,
 		Method:      _input.Method,
 		Endpoint:    _input.Endpoint,
-		AuthType:    _input.AuthType,
-		DataType:    _input.DataType,
+		Accept:      _input.Accept,
 		ContentType: _input.ContentType,
+		AuthType:    _input.AuthType,
 	}
 
 	datasourceAuth := entity.DatasourceAuth{
