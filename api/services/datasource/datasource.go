@@ -64,8 +64,7 @@ func (app *Definition) Connect(ctx iris.Context) interface{} {
 		url = url + "?" + params.AuthRequest.APIKey + "=" + params.AuthRequest.APIValue
 	}
 	request, _ := http.NewRequest(params.Method, url, bytes.NewBuffer(jsonValue))
-	//request.Header.Set("Content-Type", params.ContentType)
-	//request.Header.Set("Content-Type", "application/json; charset=utf-8")
+
 	request.Header.Set("Content-Encoding", "br")
 	request.Header.Set("Accept", "application/json")
 
@@ -87,6 +86,8 @@ func (app *Definition) Connect(ctx iris.Context) interface{} {
 		request.Header.Set("Content-Type", "text/plain")
 		request.Header.Set("Content-Length", strconv.Itoa(len(jsonValue)))
 		break
+	default:
+		request.Header.Set("Content-Type", "application/json; charset=utf-8")
 	}
 	// Establece el tipo de autenticación
 	switch params.AuthType {
