@@ -22,6 +22,12 @@ func (app *Definition) saveManager(_input *vmdl.Datasource) error {
 		Response:    string(_response),
 	}
 
+	_input.ID, err = _datasourcerepository.Save(&dataSource)
+	if err != nil {
+		return err
+	}
+
+	_input.AuthParams.DatasourceID = _input.ID
 	datasourceAuth := entity.DatasourceAuth{
 		ID:           0,
 		DatasourceID: _input.AuthParams.DatasourceID,
@@ -32,18 +38,13 @@ func (app *Definition) saveManager(_input *vmdl.Datasource) error {
 		APIKey:       _input.AuthParams.APIKey,
 		APIValue:     _input.AuthParams.APIValue,
 	}
-
-	_input.ID, err = _datasourcerepository.Save(&dataSource)
-	if err != nil {
-		return err
-	}
-
 	_input.AuthParams.ID, err = _datasourceauthrespository.Save(&datasourceAuth)
 	if err != nil {
 		return err
 	}
 
 	for k, row := range _input.RequestParams {
+		_input.RequestParams[k].DatasourceID = _input.ID
 		var param = entity.DatasourceParam{
 			ID:           0,
 			DatasourceID: row.DatasourceID,
