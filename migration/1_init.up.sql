@@ -20,14 +20,14 @@ SET FOREIGN_KEY_CHECKS = 0;
 -- ----------------------------
 -- Table structure for datasource_auth
 -- ----------------------------
-CREATE TABLE `datasource_auth`  (
+CREATE TABLE `datasource_auths`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `bearer` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
-  `username` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `password` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `apiSource` varchar(15) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '' COMMENT 'Header, QueryParams',
-  `apiKey` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `apiValue` text CHARACTER SET utf8 COLLATE utf8_general_ci NULL,
+  `bearer` text NULL,
+  `username` varchar(30) NULL DEFAULT '',
+  `password` varchar(30) NULL DEFAULT '',
+  `apiSource` varchar(15) NULL DEFAULT '' COMMENT 'Header, QueryParams',
+  `apiKey` varchar(30) NULL DEFAULT '',
+  `apiValue` text NULL,
   `datasource_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `datasourceId_idx`(`datasource_id`) USING BTREE
@@ -36,10 +36,10 @@ CREATE TABLE `datasource_auth`  (
 -- ----------------------------
 -- Table structure for datasource_param
 -- ----------------------------
-CREATE TABLE `datasource_param`  (
+CREATE TABLE `datasource_params`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `key` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `type` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
+  `key` varchar(30) NOT NULL,
+  `type` varchar(30) NOT NULL,
   `datasource_id` int(10) UNSIGNED NOT NULL,
   PRIMARY KEY (`id`) USING BTREE,
   INDEX `datasourceId_idx`(`datasource_id`) USING BTREE
@@ -48,15 +48,16 @@ CREATE TABLE `datasource_param`  (
 -- ----------------------------
 -- Table structure for datasource
 -- ----------------------------
-CREATE TABLE `datasource`  (
+CREATE TABLE `datasources`  (
   `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT,
-  `name` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `description` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NULL DEFAULT '',
-  `method` varchar(5) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `endpoint` text CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL,
-  `authType` varchar(10) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `dataType` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
-  `contentType` varchar(30) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '',
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `description` varchar(255) NULL DEFAULT '',
+  `method` varchar(5) NOT NULL DEFAULT '',
+  `endpoint` text NOT NULL,
+  `authType` varchar(20) NOT NULL DEFAULT '',
+  `accept` varchar(50) NOT NULL DEFAULT '',
+  `contentType` varchar(50) NOT NULL DEFAULT '',
+  `response` text NULL,
   PRIMARY KEY (`id`) USING BTREE
 ) ENGINE = MyISAM AUTO_INCREMENT = 1 CHARACTER SET = utf8 COLLATE = utf8_general_ci ROW_FORMAT = Dynamic;
 

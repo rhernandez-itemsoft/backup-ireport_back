@@ -2,24 +2,25 @@ package main
 
 import (
 	goCtx "context"
+	"flag"
 	"fmt"
 	conf "ireport/config"
 	"ireport/ihelpers/errors"
 	"ireport/routes"
 	"time"
 
+	_ "github.com/go-sql-driver/mysql"
 	"github.com/golang-migrate/migrate/v4"
 	"github.com/golang-migrate/migrate/v4/database/mysql"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/iris-contrib/middleware/cors"
 	"github.com/jinzhu/gorm"
 	"github.com/kataras/iris/v12"
-
-	_ "github.com/go-sql-driver/mysql"
 )
 
 func main() {
 	//realiza la migración de la BD
-	migrateDataBase()
+	//migrateDataBase()
 
 	//Inicializa la conección con la Base de datos
 	db, err := initDataBase()
@@ -27,6 +28,9 @@ func main() {
 	if err != nil {
 		errors.Catch(err, true)
 	}
+
+	//realiza la migración de la BD
+	migrateDataBase(db)
 
 	//Programamos que si ocurre alguna falla, entonces la Base de datos se cerrará
 	iris.RegisterOnInterrupt(func() {
@@ -43,21 +47,44 @@ func main() {
 	app.Run(iris.Addr("localhost:8080"), iris.WithConfiguration(conf.IrisConfig))
 }
 
-func migrateDataBase() error {
+// func obj_migrateDataBase(db *gorm.DB) error {
+// 	db.AutoMigrate(&entity.Datasource{})
+// 	db.Set("gorm:table_options", "ENGINE=MyISAM").AutoMigrate(&entity.Datasource{})
 
-	db, err := gorm.Open("mysql", conf.DBConf.User+":"+conf.DBConf.Password+"@("+conf.DBConf.Server+":"+conf.DBConf.Port+")/"+conf.DBConf.DataBase+"?multiStatements=true")
-	defer db.Close()
+// 	//db.HasTable(&entity.Datasource{})
+// 	//db.DropTable(&entity.Datasource{})
+// 	// Drop model's `User`'s table and table `products`
+// 	db.DropTableIfExists(&entity.Datasource{})
+
+// 	db.CreateTable(&entity.Datasource{})
+// 	db.Model(&entity.Datasource{}).AddIndex("idx_name", "name")
+
+// 	return nil
+// }
+func migrateDataBase(db *gorm.DB) error {
+
+	// db, err := gorm.Open("mysql", conf.DBConf.User+":"+conf.DBConf.Password+"@("+conf.DBConf.Server+":"+conf.DBConf.Port+")/"+conf.DBConf.DataBase+"?multiStatements=true")
+	// defer db.Close()
+	// if err != nil {
+	// 	return err
+	// }
+
+	driver, err := mysql.WithInstance(db.DB(), &mysql.Config{})
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
-	driver, _ := mysql.WithInstance(db.DB(), &mysql.Config{})
-	m, err := migrate.NewWithDatabaseInstance(
-		"file:///Personal\\ItemsoftMX\\Projects\\Golang\\src\\ireport-back\\DB",
 
+	var migrationDir = flag.String("migration.files", "./migration", "Directory where the migration files are located ?")
+
+	fmt.Printf("file://%s", *migrationDir)
+	m, err := migrate.NewWithDatabaseInstance(
+		fmt.Sprintf("file://%s", *migrationDir),
 		"ireport",
 		driver,
 	)
 	if err != nil {
+		fmt.Println(err)
 		return err
 	}
 	m.Steps(2)

@@ -58,10 +58,10 @@ func (app *Definition) Connect(ctx iris.Context) interface{} {
 	url := params.Endpoint
 	// jsonData := map[string]string{}
 	// jsonValue, _ := json.Marshal(jsonData)
-	jsonValue, _ := json.Marshal(params.Params)
+	jsonValue, _ := json.Marshal(params.RequestParams)
 
-	if params.AuthType == "apiKey" && params.AuthRequest.APISource != "header" {
-		url = url + "?" + params.AuthRequest.APIKey + "=" + params.AuthRequest.APIValue
+	if params.AuthType == "apiKey" && params.AuthParams.APISource != "header" {
+		url = url + "?" + params.AuthParams.APIKey + "=" + params.AuthParams.APIValue
 	}
 	request, _ := http.NewRequest(params.Method, url, bytes.NewBuffer(jsonValue))
 
@@ -92,15 +92,15 @@ func (app *Definition) Connect(ctx iris.Context) interface{} {
 	// Establece el tipo de autenticación
 	switch params.AuthType {
 	case "apiKey":
-		if params.AuthRequest.APISource == "header" {
-			request.Header.Set(params.AuthRequest.APIKey, params.AuthRequest.APIValue)
+		if params.AuthParams.APISource == "header" {
+			request.Header.Set(params.AuthParams.APIKey, params.AuthParams.APIValue)
 		}
 		break
 	case "bearerToken":
-		request.Header.Set("Authorization", "Bearer "+params.AuthRequest.Bearer)
+		request.Header.Set("Authorization", "Bearer "+params.AuthParams.Bearer)
 		break
 	case "basicAuth":
-		userPass := params.AuthRequest.Username + "." + params.AuthRequest.Password
+		userPass := params.AuthParams.Username + "." + params.AuthParams.Password
 		userPass = base64.StdEncoding.EncodeToString([]byte(userPass))
 		request.Header.Set("Authorization", "Basic  "+userPass)
 		break

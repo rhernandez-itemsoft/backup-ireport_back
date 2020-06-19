@@ -14,17 +14,19 @@ type Datasource struct {
 	//url del endpoint
 	Endpoint string `json:"endpoint"`
 
-	//tipo de contendo que acepta: application/json, fomultipart/form-data, x-www-form-urlencoded, text/plain
-	Accept string `json:"accept"`
-
 	//tipo de autorizacion
 	AuthType string `json:"authType"`
 
 	//parametros de autorizacion
-	AuthRequest DatasourceAuth `json:"authRequest"`
+	AuthParams DatasourceAuth `json:"authParams"`
+
+	//tipo de contendo que acepta: application/json, fomultipart/form-data, x-www-form-urlencoded, text/plain
+	Accept string `json:"accept"`
 
 	//tipo de contendo que envia: application/json, fomultipart/form-data, x-www-form-urlencoded, text/plain
 	ContentType string `json:"contentType"`
 
-	Params []DatasourceParam `json:"params"`
+	RequestParams []DatasourceParam `json:"requestParams"`
+
+	Response interface{} `json:"response"`
 }

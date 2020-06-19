@@ -9,7 +9,7 @@ type Datasource struct {
 	Method      string `gorm:"column:method"`
 	Endpoint    string `gorm:"column:endpoint"`
 	AuthType    string `gorm:"column:authType"`
-	//DataType    string `gorm:"column:dataType"`
 	ContentType string `gorm:"column:contentType"`
 	Accept      string `gorm:"column:accept"`
+	Response    string `gorm:"column:response"`
 }
